@@ -1,0 +1,268 @@
+father 19HN-F09E-PM30
+
+
+
+
+# WELCOME TO C-SHAP TUTORIAL, I'AM YOUR TUTOUR ABDALLA ABUU HAMAD
+#BY DEFAULT IF YOU CHOOSE NOT EMPTY PROJECT THERE WILL BE SOME BULT IN FUNCTION AND STYLES IN IT
+#TO REMOVE STYLE WRITE 'Layout = null'
+
+
+public ActionResult saveRecord(EmployeeViewModel model)
+        {
+
+            try
+            {
+
+                MVCTutorialEntities1 db = new MVCTutorialEntities1();
+                Employee emp = new Employee();
+                emp.DepartmentID = model.DepartmentID;
+                emp.Name = model.Name;
+                db.Employees.Add(emp);
+                db.SaveChanges();
+                int latestEmpId = emp.EmployeeID;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+           
+
+            return RedirectToAction("Index");
+        }
+
+
+
+ public ActionResult Index()
+        {
+
+            /*
+            ViewBag.Name = "Abdalla";
+
+            List<string> list = new List<string>();
+            list.Add("Abdalla");
+            list.Add("Hajeezy");
+            list.Add("Tyreez");
+
+            ViewBag.NameList = list;
+
+
+            List<Employee> EmpList = new List<Employee>();
+            Employee employee = new Employee();
+
+            EmpList.Add(new Employee { EmployeeID = 1, Name = "Abdalla", DepartmentID = 1 });
+            EmpList.Add(new Employee { EmployeeID = 2, Name = "Hajeezy", DepartmentID = 2 });
+            EmpList.Add(new Employee { EmployeeID = 3, Name = "Tyreez", DepartmentID = 3 });
+            */
+
+		//for one record
+
+            MVCTutorialEntities db = new  MVCTutorialEntities();
+
+            Employee employee = db.Employees.SingleOrDefault(x => x.EmployeeID == 1);
+
+            EmployeeViewModel EmpVm = new EmployeeViewModel();
+
+            EmpVm.EmployeeID = employee.EmployeeID;
+            EmpVm.Name = employee.Name;
+            EmpVm.DepartmentID = employee.DepartmentID;
+
+            return View(EmpVm);
+
+
+
+	//for multiple record
+
+
+		  MVCTutorialEntities1 db = new  MVCTutorialEntities1();
+
+            List<Employee> empList = db.Employees.ToList();
+
+            EmployeeViewModel empVm = new EmployeeViewModel();
+
+            List<EmployeeViewModel> empVmList = empList.Select(x => new EmployeeViewModel
+            { EmployeeID = x.EmployeeID,
+                Name = x.Name,
+                DepartmentID = x.DepartmentID,
+                DepartmentName = x.Department.DepartmentName,
+            }).ToList();
+
+            
+            return View(empVmList);
+        }
+
+
+		//
+  <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                @Html.ActionLink("Application name", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
+                    <li>@Html.ActionLink("About", "About", "Home")</li>
+                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
+                </ul>
+            </div>
+//
+
+
+  drop down 
+
+@model MVCTutorial.Models.EmployeeViewModel
+
+@{
+    Layout = null;
+    ViewBag.Title = "dropDown";
+}
+
+
+
+<h2>dropDown</h2>
+@Html.Partial("/Views/Shared/nav.cshtml");
+
+@using (Html.BeginForm("saveRecord", "Test", FormMethod.Post))
+{ 
+
+@Html.DropDownListFor(model => model.DepartmentID, ViewBag.DepList as SelectList, " ---- Seledt-----");
+@Html.TextBoxFor(model => model.Name, new {@placeholder= "name"});
+<input type="submit" value="register"/>
+
+}
+
+//////
+
+
+employee details
+@model MVCTutorial.Models.EmployeeViewModel
+
+@{
+                /**/
+
+                Layout = null;
+                ViewBag.Title = "EmployeeDetails";
+}
+
+<h2>EmployeeDetails</h2>
+@Html.Partial("/Views/Shared/nav.cshtml");
+
+<table>
+    <tr>
+        <th>Emp ID</th>
+        <th>Name</th>
+        <th>Department</th>
+    </tr>
+
+    <tr>
+        <td>@Model.EmployeeID</td>
+        <td>@Model.Name</td>
+        <td>@Model.DepartmentName</td>
+    </tr>
+
+
+</table>
+</p>
+
+<a href="/dropDown">dropdown</a>
+
+
+//////
+
+index 
+
+@model IEnumerable<MVCTutorial.Models.EmployeeViewModel>
+@{
+    Layout = null;
+    ViewBag.Title = "Index";
+
+}
+
+<h2>Index</h2>
+
+@Html.Partial("/Views/Shared/nav.cshtml");
+
+<table>
+    <tr>
+        <th>Emp ID</th>
+        <th>Name</th>
+        <th>Department</th>
+        <th>Action</th>
+    </tr>
+    @{
+
+        if (Model != null)
+        {
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.EmployeeID</td>
+                    <td>@item.Name</td>
+                    <td>@item.DepartmentName</td>
+                    <td><a href="/Test/EmployeeDetails?EmployeeID=@item.EmployeeID">View</a></td>
+                </tr>
+            }
+        }
+    }
+
+</table>
+
+//
+<h2>dropDown</h2>
+@Html.Partial("/Views/Shared/nav.cshtml");
+
+@using (Html.BeginForm("saveRecord", "Test", FormMethod.Post))
+{
+@Html.DropDownListFor(model => model.DepartmentID, ,);
+
+@Html.TextBoxFor(model => model.Name, new {@placeholder= "name"});
+<input type="submit" value="register"/>
+
+
+
+function addTreatmentCost(){
+		Session::init();
+		$id = Session::get('id');
+		
+		$data = array();
+		$data['pid'] = strip_tags($_POST['pid']);
+		$data['gharama'] = strip_tags($_POST['gharama']);
+		$data['pdate'] = strip_tags($_POST['pdate']);
+		
+				
+		$this->db->insert('Treatmentcost' ,array('pid'=>$data['pid'],'trcost'=>$data['gharama'],'cdate'=>$data['pdate']));
+	 }
+	 
+	 function addAllowanceCost(){
+		Session::init();
+		$id = Session::get('id');
+		
+		$data = array();
+		$data['pid'] = strip_tags($_POST['pid']);
+		$data['amount'] = strip_tags($_POST['amount']);
+		$data['pdate'] = strip_tags($_POST['pdate']);
+		
+				
+		$this->db->insert('allowancecost' ,array('pid'=>$data['pid'],'allcost'=>$data['amount'],'acdate'=>$data['pdate']));
+		  header('location:' .URL. 'patient');
+	 }
+	 
+	 function addTicketCost(){
+		Session::init();
+		$id = Session::get('id');
+		
+		$data = array();
+		$data['pid'] = strip_tags($_POST['pid']);
+		$data['amount'] = strip_tags($_POST['amount']);
+		$data['pdate'] = strip_tags($_POST['pdate']);
+		
+				
+		$this->db->insert('ticketcost' ,array('pid'=>$data['pid'],'tickcost'=>$data['amount'],'tcdate'=>$data['pdate']));
+		 header('location:' .URL. 'patient');
+	 }
+	
+
+
